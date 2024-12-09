@@ -1,4 +1,14 @@
-import { Box, Button, TextField, Toolbar, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	TextField,
+	Toolbar,
+	Typography,
+} from "@mui/material";
 import Navbar from "../Components/Navbar";
 import { useState } from "react";
 import {
@@ -7,6 +17,7 @@ import {
 	Map,
 	Pin,
 } from "@vis.gl/react-google-maps";
+import moment from "moment/moment";
 
 const apiKey = import.meta.env.VITE_MAPS_API_KEY;
 
@@ -18,8 +29,27 @@ function MarkerPin({ lat, lng }) {
 	);
 }
 
-function handleSubmit(crimeData) {
-	console.log(crimeData);
+async function handleSubmit(crimeData) {
+	try {
+		const response = await fetch("http://localhost:3000/api/report-crime", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(crimeData),
+		});
+
+		if (!response.ok) {
+			throw new Error("Network response was not ok");
+		}
+
+		const responseData = await response.json();
+		console.log("Response:", responseData);
+	} catch (error) {
+		console.error("Error:", error);
+	}
+
+	window.alert("Record Submitted");
 }
 
 export default function Report() {
@@ -62,21 +92,39 @@ export default function Report() {
 									}}
 								/>
 							</Box>
-							<TextField
-								fullWidth
-								sx={{ my: 2 }}
-								id="outlined"
-								label="Crime"
-								onChange={(event) => {
-									setCrime(event.target.value);
-								}}
-							/>
+							<Box sx={{ py: 2 }}>
+								<FormControl fullWidth>
+									<InputLabel id="demo-simple-select-label">Crime</InputLabel>
+									<Select
+										labelId="demo-simple-select-label"
+										id="demo-simple-select"
+										value={crime}
+										label="Crime"
+										onChange={(event) => {
+											setCrime(event.target.value);
+										}}
+									>
+										<MenuItem value={"vandalism"}>Vandalism</MenuItem>
+										<MenuItem value={"Homocide"}>Homocide</MenuItem>
+										<MenuItem value={"Assult"}>Assult</MenuItem>
+										<MenuItem value={"Robbery"}>Robbery</MenuItem>
+									</Select>
+								</FormControl>
+							</Box>
 						</Box>
 						<Button
 							variant="contained"
 							fullWidth
 							sx={{ my: 1 }}
-							onClick={() => handleSubmit({ lng: lng, lat: lat, crime: crime })}
+							onClick={() =>
+								handleSubmit({
+									latitude: lat,
+									longitude: lng,
+									report_time: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+									crime_type: crime,
+									user_id: Math.floor(Math.random() * 1000),
+								})
+							}
 						>
 							Submit
 						</Button>
@@ -91,8 +139,8 @@ export default function Report() {
 								setLng(latlng.lng);
 							}}
 							mapId="Crime Map"
-							defaultZoom={13}
-							defaultCenter={{ lat: -33.860664, lng: 151.208138 }}
+							defaultZoom={10}
+							defaultCenter={{ lat: 34.0549, lng: -118.2426 }}
 						>
 							{lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180 ? (
 								<MarkerPin lat={lat} lng={lng} />

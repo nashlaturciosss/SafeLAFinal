@@ -56,27 +56,38 @@ function ResourceCards() {
 		>
 			<ResourceCard
 				src={"https://banner2.cleanpng.com/20180425/arq/avenugk09.webp"}
-				title={"Hello World"}
+				title={"Neighborhood Watch Programs"}
 			>
-				Wow we have an important description here of things to do and stuff and
-				things and other things such that this is a text that is meant to be in
-				place for something
+				Los Angeles Neighborhood Watch Initiative:
+				- To join or start a program in your area, contact the Los Angeles Police Department (LAPD) Community Relations Office at your local precinct.
+				- More information is available on the LAPDs Neighborhood Watch Page.
+				- Attend LAPD-sponsored events or meetings for neighborhood safety planning.
 			</ResourceCard>
 			<ResourceCard
 				src={"https://banner2.cleanpng.com/20180425/arq/avenugk09.webp"}
-				title={"Hello World"}
+				title={"Crisis Hotlines"}
 			>
-				Wow we have an important description here of things to do and stuff and
-				things and other things such that this is a text that is meant to be in
-				place for something
+				- National Domestic Violence Hotline: 1-800-799-SAFE (7233)
+				- Suicide Prevention Lifeline: 988
+				- Sexual Assault Hotline: 1-800-656-HOPE
 			</ResourceCard>
 			<ResourceCard
-				src={"https://banner2.cleanpng.com/20180425/arq/avenugk09.webp"}
-				title={"Hello World"}
-			>
-				Wow we have an important description here of things to do and stuff and
-				things and other things such that this is a text that is meant to be in
-				place for something
+				title={"Crime Prevention Information"}
+				>
+				Home and Vehicle Security:
+					- Always lock your doors and windows when leaving home or your vehicle.
+					
+					- Use security cameras and motion-sensor lights where possible.
+					
+					- Do not leave valuables in plain sight in vehicles.
+					
+					Personal Safety Tips:
+					- Avoid walking alone at night in poorly lit areas.
+					
+					- Stay aware of your surroundings, especially in crowded places.
+					
+					- When traveling, share your route with a trusted person.
+					- Use caution while sharing personal information online.
 			</ResourceCard>
 		</Box>
 	);

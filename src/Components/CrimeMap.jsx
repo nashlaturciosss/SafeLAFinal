@@ -1,49 +1,84 @@
+import { useEffect, useState } from "react";
 import "./map.css";
 
-import {
-	AdvancedMarker,
-	APIProvider,
-	Map,
-	Pin,
-} from "@vis.gl/react-google-maps";
-
-const dataPoints = [
-	{ key: "operaHouse", location: { lat: -33.8567844, lng: 151.213108 } },
-	{ key: "tarongaZoo", location: { lat: -33.8472767, lng: 151.2188164 } },
-	{ key: "manlyBeach", location: { lat: -33.8209738, lng: 151.2563253 } },
-	{ key: "hyderPark", location: { lat: -33.8690081, lng: 151.2052393 } },
-	{ key: "theRocks", location: { lat: -33.8587568, lng: 151.2058246 } },
-	{ key: "circularQuay", location: { lat: -33.858761, lng: 151.2055688 } },
-	{ key: "harbourBridge", location: { lat: -33.852228, lng: 151.2038374 } },
-	{ key: "kingsCross", location: { lat: -33.8737375, lng: 151.222569 } },
-	{ key: "botanicGardens", location: { lat: -33.864167, lng: 151.216387 } },
-	{ key: "museumOfSydney", location: { lat: -33.8636005, lng: 151.2092542 } },
-	{ key: "maritimeMuseum", location: { lat: -33.869395, lng: 151.198648 } },
-	{ key: "kingStreetWharf", location: { lat: -33.8665445, lng: 151.1989808 } },
-	{ key: "aquarium", location: { lat: -33.869627, lng: 151.202146 } },
-	{ key: "darlingHarbour", location: { lat: -33.87488, lng: 151.1987113 } },
-	{ key: "barangaroo", location: { lat: -33.8605523, lng: 151.1972205 } },
-];
+import { AdvancedMarker, APIProvider, Map } from "@vis.gl/react-google-maps";
+import { Dialog, DialogContent, DialogTitle, Typography } from "@mui/material";
 
 const apiKey = import.meta.env.VITE_MAPS_API_KEY;
 
+function MarkerWithInfowindow({ position, title, author, time }) {
+	const [infowindowOpen, setInfowindowOpen] = useState(false);
+	console.log(Date.now());
+	return (
+		<>
+			<AdvancedMarker
+				onClick={() => setInfowindowOpen(true)}
+				position={position}
+				title={title}
+			/>
+			{infowindowOpen && (
+				<Dialog
+					sx={{ w: 500 }}
+					open={infowindowOpen}
+					onClose={() => setInfowindowOpen(false)}
+				>
+					<DialogTitle>
+						{title}
+						<Typography>{"Reported by User-" + author}</Typography>
+					</DialogTitle>
+					<DialogContent>
+						<Typography>
+							{title +
+								" reported at: (" +
+								position.lat +
+								", " +
+								position.lng +
+								") on " +
+								time}
+						</Typography>
+					</DialogContent>
+				</Dialog>
+			)}
+		</>
+	);
+}
+
 export default function CrimeMap() {
+	const [dataPoints, setDataPoints] = useState();
+
+	useEffect(() => {
+		fetch("http://localhost:3000/api/crime-data")
+			.then((response) => response.json())
+			.then((data) => {
+				console.log(data);
+				setDataPoints(data);
+			})
+			.catch((error) => console.error("Error fetching crime data:", error));
+	}, []);
+
 	return (
 		<APIProvider apiKey={apiKey}>
 			<Map
 				className="map"
 				mapId="Crime Map"
-				defaultZoom={13}
-				defaultCenter={{ lat: -33.860664, lng: 151.208138 }}
+				defaultZoom={10}
+				defaultCenter={{ lat: 34.0549, lng: -118.2426 }}
 			>
 				<>
-					{dataPoints.map((point) => {
-						return (
-							<AdvancedMarker key={point.key} position={point.location}>
-								<Pin background={"#FBBC04"} glyphColor={"#000"} borderColor={"#000"} />
-							</AdvancedMarker>
-						);
-					})}
+					{dataPoints
+						? dataPoints.map((report) => {
+								const location = { lat: report.latitude, lng: report.longitude };
+								return (
+									<MarkerWithInfowindow
+										key={report.report_time}
+										position={location ?? { lng: 0, lat: 0 }}
+										title={report.crime_type ?? ""}
+										author={report.user_id ?? ""}
+										time={report.report_time ?? ""}
+									></MarkerWithInfowindow>
+								);
+						  })
+						: null}
 				</>
 			</Map>
 		</APIProvider>

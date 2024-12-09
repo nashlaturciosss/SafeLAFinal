@@ -13,12 +13,8 @@ export default function AboutUs() {
 				</Typography>
 			</Box>
 			<Typography sx={{ m: 2 }}>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-				non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			SafeLA aims to empower Los Angeles residents with real-time crime updates, provide community-driven reporting, and increase access to essential resources that promote safety and support for all.
+			By connecting users with up-to-date information on local incidents and offering a curated page filled with support services, SafeLA fosters a safer, more informed community.
 			</Typography>
 			<Paper sx={{ padding: 10, background: "#CFD8DC", height: "2000" }}>
 				<Box display="flex" flexDirection="row">
